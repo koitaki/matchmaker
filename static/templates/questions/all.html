@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block styles %}
+    .success {
+        color: #ff6600;
+    }
+{% endblock %}
+
+{% block content %}
+
+<div class = 'row'>
+
+    {% for question in questions %}
+        <h4>{{ question }}</h4>
+        <p>
+        <form method="POST" action=""> {% csrf_token %}
+            <input type="hidden" value="{{ question.id }}" name="question_id" />
+
+            {% for ans in question.answer_set.all %}
+                <input type="radio" required='required' value="{{ ans }}"
+                       {% for abc in ans.useranswer_set.all %}
+                            {% if abc and abc.user == request.user %}
+                                checked = 'checked'
+                            {% endif %}
+                       {% endfor %}
+                       name="answer"> {{ ans }} <br/>
+            {% endfor %}
+            How important is this to you?:
+            <select required='required' name="importance_level">
+                {% for imp in importance_levels %}
+                    <option
+                       {% for abc in question.useranswer_set.all %}
+                            {% if abc.importance_level == imp and abc.user == request.user %}
+                                selected = 'selected'
+                            {% endif %}
+                       {% endfor %}
+                       value="{{ imp }}">{{ imp }}</option>
+                {% endfor %}
+            </select>
+            </p>
+
+
+            <h4>Ideal Match Answer <small>How You Would Like Them To Answer</small></h4>
+            <p>
+            {% for ans in question.answer_set.all %}
+                <input type="radio" required='required' value="{{ ans }}"
+                       {% for abc in ans.matchanswer_set.all %}
+                            {% if abc and abc.user == request.user %}
+                                checked = 'checked'
+                            {% endif %}
+                       {% endfor %}
+                       name="match_answer"> {{ ans }} <br/>
+            {% endfor %}
+            How important is their answer to you?:
+            <select required='required' name="match_importance_level">
+                {% for imp in importance_levels %}
+                    <option
+                       {% for abc in question.answer_set.all %}
+                            {% if abc.user_importance_level == imp and abc.user == request.user %}
+                                selected = 'selected'
+                            {% endif %}
+                       {% endfor %}
+                       value="{{ imp }}">{{ imp }}</option>
+                {% endfor %}
+            </select>
+            </p>
+            <input type="submit" class='btn' value="Save">
+        </form>
+    {% endfor %}
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if questions.has_previous %}
+                <a href="?page={{ questions.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ questions.number }} of {{ questions.paginator.num_pages }}.
+            </span>
+
+            {% if questions.has_next %}
+                <a href="?page={{ questions.next_page_number }}">next</a>
+            {% endif %}
+        </span>
+    </div>
+
+</div>
+
+{% endblock %}

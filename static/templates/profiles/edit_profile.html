@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block jquery %}
+    $('#myTab a').click(function (e) {
+      e.preventDefault()
+      $(this).tab('show')
+    })
+{% endblock %}
+
+{% block content %}
+
+<div role="tabpanel">
+
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Edit</a></li>
+    <li role="presentation"><a href="#jobs" aria-controls="jobs" role="tab" data-toggle="tab">Jobs</a></li>
+    <li role="presentation"><a href="#locations" aria-controls="locations" role="tab" data-toggle="tab">Locations</a></li>
+  </ul>
+
+  <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="home">
+            <form method="POST" action="" enctype="multipart/form-data">{% csrf_token %}
+                <div class="row">
+                    <div class="col-lg-12">
+                        {{ user_picture_form.as_p }}
+                    </div>
+                </div>
+                <input class="btn btn-success" type="submit" value="Update" />
+            </form>
+        </div>
+
+        <div role="tabpanel" class="tab-pane" id="jobs">
+            <div class="row">
+                <div class="col-lg-3">
+                    <ol>
+                        {% for item in formset_j %}
+                            {% if item.instance.position %}
+                                    <li>{{ item.instance.position }}, {{ item.instance.employer }}</li>
+                            {% endif %}
+                        {% endfor %}
+                    </ol>
+                </div>
+                <div class="col-lg-8">
+                    <form method="POST" action="/edit/jobs">{% csrf_token %}
+                        {{ formset_j.management_form }}
+                        {{ formset_j.as_p }}
+                        <input class="btn btn-success" type="submit" value="Update" />
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div role="tabpanel" class="tab-pane" id="locations">
+            <div class="row">
+                <div class="col-lg-3">
+                    <ol>
+                        {% for item in formset_j %}
+                            {% if item.instance.street_address %}
+                                    <li>{{ item.instance.street_address }}, {{ item.instance.city }}</li>
+                            {% endif %}
+                        {% endfor %}
+                    </ol>
+                </div>
+                <div class="col-lg-8">
+                    <form method="POST" action="/edit/locations">{% csrf_token %}
+                        {{ formset_a.management_form }}
+                        {{ formset_a.as_p }}
+                        <input class="btn btn-success" type="submit" value="Update" />
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+{% endblock %}

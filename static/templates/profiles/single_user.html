@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+    <div class="row">
+
+        <div class="col-lg-6">
+            <h2>
+                {% if single_user.first_name %}
+                    {{ single_user.first_name|capfirst }} {{ single_user.last_name|capfirst }}
+                {% else %}
+                    {{ single_user|capfirst }}
+                {% endif %}
+            </h2>
+
+            {% for item in single_user.userpicture_set.all %}
+                <img src='{{ MEDIA_URL }}{{ item }}' class="img-responsive thumbnail"/>
+            {% endfor %}
+
+        </div>
+
+        <div class="col-lg-5">
+            <h1>
+                Match {{ match }}%
+            </h1>
+            <h2>
+                Info
+            </h2>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">Recent Jobs</div>
+                {% for item in single_user.job_set.all %}
+                    {{ item|capfirst }}
+                {% endfor %}
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">Addresses</div>
+                {% for item in single_user.address_set.all %}
+                    {{ item|capfirst }}
+                {% endfor %}
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}

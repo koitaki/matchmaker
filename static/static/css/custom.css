@@ -1,0 +1,28 @@
+body {
+    padding-top: 80px;
+}
+
+.body-contents {
+    padding-top: 20px;
+}
+
+.navbar-inverse {
+    background-color: #f7f7f7;
+    border-color: #A59C9C;
+}
+
+.navbar {
+    min-height: 80px;
+}
+
+.navbar-brand {
+    padding: 10px 15px;
+}
+
+.navbar-nav>li>a {
+    padding-top: 30px;
+}
+
+.navbar-form {
+    margin-top: 20px;
+}
